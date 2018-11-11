@@ -1,41 +1,27 @@
-//Vetor bi ou tridimensional
-PVector v = new PVector();
-
-//Imagem
-PImage pic = createImage(500, 500, RGB);
-
-float g = 9.8;
-float step = 0.1;
-float t = 0;
-float diameter = 20;
-
-float x0 = 0;
-float y0 = 0;
-
-float vx0 = 50;
-float vy0 = 2;
-
-float y = 0;
-
-void setup() {
-  size(800, 600);
-
-  pic.set(250, 250, color(255, 0, 0));
+void setup() {  
+  size(500, 500);
+  //parametros: x, y, profundidade do raio (ignorar) , amostra do pixel (quadratica), shader (ignora), shader tmb(ignora), largura do filtro gaussiano, gamma
+  RenderOptions options = new RenderOptions(500, 500, 1, 4, 4, 4, 2.0, 2.2, 0);
+  
+  Camera camera = new Camera(radians(45.0), new Film(options.width, options.height), new PMatrix3D());
+  
+  //Posição inicial da camera
+  camera.lookAt(new PVector(0, 0, 10.0), new PVector(0, 0, 0), new PVector(0, 1.0, 0));
+  
+  Sphere sphere = new Sphere(new PVector(0, 0, 0), 2.0, null, false, null);
+  
+  ArrayList<Shape> shapes = new ArrayList();
+  shapes.add(sphere);
+  
+  Scene scene = new Scene(shapes);
+  
+  Renderer renderer = new Renderer(options, camera, scene);
+  
+  image(renderer.render(), 0, 0);
+  
+  noLoop();//desabilita o draw
 }
 
-// Loop
 void draw() {
-  image(pic, 0, 0);
-  //background(51);
 
-  float x = x0 + vx0 * t;
-  float y = y0 + vy0 + 0.5 * g * t * t;
-
-  ellipse(x, y, diameter, diameter);
-  delay(20);
-
-  t += step;
 }
-
-//implementar filtro gaussiano2d
-//ajuste de gama é pra arrumar a cor da imagem no monitor, deixando um ajuste negativo do monitor no codigo, pra quando for exibido a exibição ser linear (2.2)

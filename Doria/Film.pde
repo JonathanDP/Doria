@@ -27,10 +27,4 @@ public class Film {
     PVector correct = new PVector(scNorm.x * aspectRatio(), scNorm.y, -1);
     return correct;
   }
-  
- /* public PVector imgPlain(float x, float y){
-    PVector sSpace = screenSpace(x, y,);
-    PVector correct = new PVector(sSpace.x * aspectRatio(), sSpace.y, -1);
-    return correct;
-  }*/
 }

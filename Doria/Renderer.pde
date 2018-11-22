@@ -12,7 +12,28 @@ public class Renderer {
   }
   
   public PVector computeDirectIllumination(BSDF bsdf, ShaderGlobals shaderGlobals) {
-    return null;
+    PVector directIllumination = new PVector(0, 0, 0);
+    
+    for (int i = 0; i < scene.shapes.size(); i++){
+      Shape light = scene.shapes.get(i);
+      
+      if (light.explicitLight){
+        shaderGlobals.lightDirection = PVector.sub(((Sphere)light).position, shaderGlobals.point).normalize();
+        Ray ray = new Ray(shaderGlobals.point, shaderGlobals.lightDirection);
+        
+        Intersection intersection = scene.intersects(ray);
+        
+        if (intersection.hit && intersection.index == i){
+          PVector bsdfValue = bsdf.evaluate(shaderGlobals);
+          float cosine = shaderGlobals.normal.dot(shaderGlobals.lightDirection);          
+          PVector lightIntensity = light.evaluate(shaderGlobals);
+          
+          directIllumination.add(multiplyColor(PVector.mult(bsdfValue, cosine), lightIntensity));
+        }
+      }
+    }
+    
+    return directIllumination;
   }
   
   public PVector computeIndirectIllumination(BSDF bsdf, ShaderGlobals shaderGlobals, int depth) {
@@ -25,7 +46,12 @@ public class Renderer {
       Shape shape = scene.shapes.get(intersection.index);
       ShaderGlobals shaderGlobals = shape.calculateShaderGlobals(ray, intersection);
       
-      return PVector.add(shaderGlobals.normal, new PVector(1, 1, 1)).div(2);
+      if (shape.explicitLight)
+        return shape.evaluate(shaderGlobals);
+        
+      return computeDirectIllumination(shape.bsdf, shaderGlobals);
+      
+      //return PVector.add(shaderGlobals.normal, new PVector(1, 1, 1)).div(2);     
       //return new PVector(1.0, 1.0, 1.0);
     }
     return new PVector(0, 0, 0);

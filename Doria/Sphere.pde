@@ -59,7 +59,7 @@ public class Sphere extends Shape {
   
   @Override
   public PVector evaluate(ShaderGlobals shaderGlobals) {
-    return null;
+    return emission;
   }
   
   @Override

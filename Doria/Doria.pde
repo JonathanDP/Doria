@@ -8,14 +8,16 @@ void setup() {
   //Posição inicial da camera
   camera.lookAt(new PVector(0, 0, 35.0), new PVector(0, 0, 0), new PVector(0, 1.0, 0));
   
-  Sphere left = new Sphere(new PVector(-1e5 - 5, 0, 0), 1e5, null, false, null);
-  Sphere right = new Sphere(new PVector(1e5 + 5, 0, 0), 1e5, null, false, null);
-  Sphere bottom = new Sphere(new PVector(0, -1e5 - 5, 0), 1e5, null, false, null);
-  Sphere top = new Sphere(new PVector(0, 1e5 + 5, 0), 1e5, null, false, null);
-  Sphere back = new Sphere(new PVector(0, 0, -1e5 - 5), 1e5, null, false, null);
-  Sphere frontBall = new Sphere(new PVector(2.0, -3.0, 2.0), 2.0, null, false, null);
-  Sphere backBall = new Sphere(new PVector(-2.0, -3.0, -2.0), 1.5, null, false, null);
-  Sphere lightBall = new Sphere(new PVector(0, 3.0, 0), 1.5, null, true, new PVector(1.0, 1.0, 1.0));
+  Diffuse diffuse = new Diffuse(new PVector(1.0, 1.0, 1.0));
+  
+  Sphere left = new Sphere(new PVector(-1e5 - 5, 0, 0), 1e5, diffuse, false, null);
+  Sphere right = new Sphere(new PVector(1e5 + 5, 0, 0), 1e5, diffuse, false, null);
+  Sphere bottom = new Sphere(new PVector(0, -1e5 - 5, 0), 1e5, diffuse, false, null);
+  Sphere top = new Sphere(new PVector(0, 1e5 + 5, 0), 1e5, diffuse, false, null);
+  Sphere back = new Sphere(new PVector(0, 0, -1e5 - 5), 1e5, diffuse, false, null);
+  Sphere frontBall = new Sphere(new PVector(2.0, -3.0, 2.0), 2.0, diffuse, false, null);
+  Sphere backBall = new Sphere(new PVector(-2.0, -3.0, -2.0), 1.5, diffuse, false, null);
+  Sphere lightBall = new Sphere(new PVector(0, 2.0, 0), 1.5, null, true, new PVector(1.0, 1.0, 1.0));
   
   ArrayList<Shape> shapes = new ArrayList();
   shapes.add(left);

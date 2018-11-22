@@ -22,7 +22,11 @@ public class Renderer {
   public PVector trace(Ray ray, int depth){
     Intersection intersection = scene.intersects(ray);
     if (intersection.hit){
-      return new PVector(1.0, 1.0, 1.0);
+      Shape shape = scene.shapes.get(intersection.index);
+      ShaderGlobals shaderGlobals = shape.calculateShaderGlobals(ray, intersection);
+      
+      return PVector.add(shaderGlobals.normal, new PVector(1, 1, 1)).div(2);
+      //return new PVector(1.0, 1.0, 1.0);
     }
     return new PVector(0, 0, 0);
   }
@@ -31,7 +35,7 @@ public class Renderer {
     PImage image = createImage(options.width, options.height, RGB);
     
     for(int i = 0; i < options.width; i++){
-      for(int j = 0; j < options.height; i++){
+      for(int j = 0; j < options.height; j++){
         ArrayList<PVector> cameraSamples = stratifiedSample(options.cameraSamples);        
         
         PVector colour = new PVector(0, 0, 0);
@@ -50,7 +54,9 @@ public class Renderer {
         }
         
         colour.div(weightSum);
-        colour = saturate(gamma(exposure(colour, options.exposure), options.gamma));
+        colour = saturate(gamma(exposure(colour, options.exposure), options.gamma)).mult(255);
+        image.set(i,j, color(colour.x, colour.y, colour.z));
+       
       }
     }
     
